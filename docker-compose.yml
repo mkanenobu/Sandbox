@@ -1,0 +1,28 @@
+version: "3"
+services:
+  db:
+    container_name: sandbox-db
+    image: mariadb:10.6
+    environment:
+      MYSQL_DATABASE: dev_db
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      TZ: Asia/Tokyo
+    tty: true
+    ports:
+      - 3306:3306
+
+  server:
+    container_name: sandbox-server
+    platform: linux/x86_64
+    build: .
+    tty: true
+    volumes:
+      - .:/my-server
+    ports:
+      - 8080:8080
+      # prisma studio
+      - 5555:5555
+    links:
+      - db:sanxbox-db
